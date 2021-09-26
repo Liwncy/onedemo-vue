@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
-            <version>1.4.0</version>
+            <version>${shiro.version}</version>
         </dependency>
         <!-- mysql 数据库驱动 -->
         <dependency>
@@ -40,13 +40,13 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.2.0</version>
+            <version>${mybatis.plus.boot.starter.version}</version>
         </dependency>
         <!-- druid 数据库连接池 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.2.6</version>
+            <version>${druid.version}</version>
         </dependency>
     </dependencies>
 
