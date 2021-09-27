@@ -35,7 +35,9 @@
         <shiro.version>1.4.0</shiro.version>
         <log4j.version>1.2.17</log4j.version>
         <hutool.version>4.6.8</hutool.version>
+        <org.projectlombok.version>1.18.18</org.projectlombok.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
+        <pagehelper.version>5.2.1</pagehelper.version>
 
 
         <commons.lang.version>2.6</commons.lang.version>
@@ -54,6 +56,18 @@
                 <version>2.2.13.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!-- velocity代码生成使用模板 -->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>${velocity.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-collections</groupId>
+                        <artifactId>commons-collections</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

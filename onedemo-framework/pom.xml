@@ -48,6 +48,16 @@
             <artifactId>druid</artifactId>
             <version>${druid.version}</version>
         </dependency>
+        <!-- One demo 通用工具 -->
+        <dependency>
+            <groupId>com.codefishing</groupId>
+            <artifactId>onedemo-common</artifactId>
+            <version>${onedemo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

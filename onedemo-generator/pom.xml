@@ -14,25 +14,46 @@
     <description>onedemo project for Spring Boot</description>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-web</artifactId>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-test</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+        <!--代码生成器-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis.plus.generator.version}</version>
+        </dependency>
+        <!--velocity代码生成使用模板 -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+        </dependency>
+        <!-- One demo framework-->
+        <dependency>
+            <groupId>com.codefishing</groupId>
+            <artifactId>onedemo-framework</artifactId>
+            <version>${onedemo.version}</version>
+        </dependency>
+        <!-- One demo 通用工具 -->
+        <dependency>
+            <groupId>com.codefishing</groupId>
+            <artifactId>onedemo-common</artifactId>
+            <version>${onedemo.version}</version>
+        </dependency>
+        <!-- One entity 实体 -->
+        <dependency>
+            <groupId>com.codefishing</groupId>
+            <artifactId>onedemo-entity</artifactId>
+            <version>${onedemo.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

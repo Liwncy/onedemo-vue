@@ -24,6 +24,23 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${org.projectlombok.version}</version>
+        </dependency>
+        <!-- One demo 通用工具 -->
+        <dependency>
+            <groupId>com.codefishing</groupId>
+            <artifactId>onedemo-framework</artifactId>
+            <version>${onedemo.version}</version>
+        </dependency>
+        <!-- One demo 通用工具 -->
+        <dependency>
+            <groupId>com.codefishing</groupId>
+            <artifactId>onedemo-common</artifactId>
+            <version>${onedemo.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
