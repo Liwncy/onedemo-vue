@@ -1,0 +1,148 @@
+#set($moduleName = ${table.name.substring(0, 2).toLowerCase()})
+#set($camelServiceName = ${table.serviceName.substring(0, 1).toLowerCase().concat(${table.serviceName.substring(1)})})
+#set($camelName = ${camelServiceName.replace("Service","")})
+#set($basicName = ${table.serviceName.replace("Service","")})
+import { STColumn, STColumnTag, STData } from '@delon/abc/st';
+import { LayoutBaseSchema } from '../layout-base-schema';
+import { map } from 'rxjs/operators';
+import { environment } from '@env/environment';
+
+// $!{table.comment}
+export class 待修改 extends LayoutBaseSchema {
+  // 是否需要HTTPService
+  initParams: any = {
+    needData: true,
+  };
+
+  initLayout(needData: any): void {
+    this.columns = [
+      { index: 'id', title: '编号', type: 'checkbox', width: 20, resizable: false },
+      #foreach($field in ${table.fields})      
+      	#if("${field.propertyName}"!="id")
+      { index: '${field.propertyName}', title: '${field.comment}', width: 120 },
+        #end
+      #end
+    ];
+
+    this.layoutData = {
+      title: '检索一览',
+      type: 'search',
+      layout: [
+        {
+          // 页面主要参数
+          pageParams: {
+            // 页面No
+            pageNo: '待修改',
+            // 详情formId
+            formid: '',
+          },
+          // 查询条件所需参数
+          queryParams: {
+            // 包括点击查询调的api
+            url: 'servicePath/api/v1/${basicName}/list', 
+            query: {
+              ui: {
+                grid: { span: 24 },
+                spanLabel: 10,
+                spanControl: 14,
+              },
+              properties: {
+                id: {
+                  type: 'string',
+                  title: '',
+                  ui: {
+                    widget: 'hidden',
+                    grid: { span: 0 },
+                  },
+                },
+	          #foreach($field in ${table.fields})
+                #if("${field.propertyName}"!="id")
+	            ${field.propertyName}: {
+		          type: 'string',
+		          title: '${field.comment}',
+		        },
+	            #end
+	          #end
+              },
+            },
+          },
+          // 操作按钮区域
+          actionParams: {
+            // 删除、单件信息取得----所用表格中的主键，用于拼接api
+            primaryKey: 'id',
+            actionbarList: [
+              {
+                title: '新增',
+                actionType: 'add',
+                controlNo: '待修改',
+                formType: 'sf',
+                pageid: '待修改',
+                icon: 'plus',
+              },
+              {
+                title: '修改',
+                multiOperation: false,
+                actionType: 'edit',
+                controlNo: '待修改',
+                formType: 'sf',
+                pageid: '待修改',
+                icon: 'edit',
+              },
+              {
+                title: '模板',
+                controlNo: '待修改',
+                actionType: 'selectItemStaticDown',
+                icon: 'download',
+                event: {
+                  api: '',
+                  method: 'GET',
+                  click: (that: any, actionParams: any, event: any) => {
+                    that.fileDownloadUrl = environment.STATIC_SERVER_URL + '/STATIC_RES_FILES/待修改模板目录/待修改模板文件名.xlsx';
+                  },
+                },
+              },
+              {
+                title: '导入',
+                actionType: 'import',
+                controlNo: '待修改',
+                pageid: '待修改',
+                icon: 'import',
+                event: {
+                  api: 'servicePath/api/v1/${basicName}/importExcel',
+                  method: 'POST',
+                },
+              },
+              {
+                title: '导出',
+                actionType: 'export',
+                controlNo: '待修改',
+                pageid: '待修改',
+                icon: 'export',
+                event: {
+                  api: 'servicePath/api/v1/${basicName}/exportExcel',
+                  method: 'POST',
+                },
+              },
+              {
+                title: '作废',
+                actionType: 'del',
+                controlNo: '待修改',
+                pageid: '',
+                multiOperation: true,
+                icon: 'delete',
+                event: {
+                  api: 'servicePath/api/v1/${basicName}/',
+                  method: 'DELETE',
+                },
+              },
+            ],
+          },
+          // 查询结果区域
+          resultParams: {
+            columns: this.columns,
+          },
+        },
+      ],
+    };
+  }
+}

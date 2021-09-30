@@ -1,18 +1,15 @@
 package com.codefishing.onedemo.framework.controller;
 
-import com.codefishing.onedemo.common.constant.HttpStatus;
-import com.codefishing.onedemo.common.utils.DateUtils;
-import com.codefishing.onedemo.common.utils.StringUtils;
-import com.codefishing.onedemo.framework.bean.result.AjaxResult;
-import com.codefishing.onedemo.framework.controller.form.TableDataInfo;
+import cn.hutool.json.JSONUtil;
+import com.codefishing.onedemo.framework.bean.result.R;
+import com.codefishing.onedemo.framework.controller.form.BaseBean;
+import com.codefishing.onedemo.framework.controller.form.BaseCommonBean;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.*;
 
-import java.beans.PropertyEditorSupport;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,161 +17,157 @@ import java.util.List;
  *
  * @author ruoyi
  */
-public class BaseController
-{
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+public class BaseController<Q extends BaseBean, F extends BaseCommonBean> {
+  protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+  private final static String SYS_INVALID_REQUEST_PATH = "无效路径:";
 
-    /**
-     * 将前台传递过来的日期格式的字符串，自动转化为Date类型
-     */
-    @InitBinder
-    public void initBinder(WebDataBinder binder)
-    {
-        // Date 类型转换
-        binder.registerCustomEditor(Date.class, new PropertyEditorSupport()
-        {
-            @Override
-            public void setAsText(String text)
-            {
-                setValue(DateUtils.parseDate(text));
-            }
-        });
-    }
+  /**
+   * 列表查询
+   *
+   * @param queryBean
+   * @return
+   */
+  @PostMapping("/list")
+  public R queryList(@RequestBody Q queryBean) throws Exception {
+    queryListValidate(queryBean);
+    List list = doQueryList(queryBean);
+    return R.ok().data(list);
+  }
 
-    /**
-     * 设置请求分页数据
-     */
-    protected void startPage()
-    {
-//        PageDomain pageDomain = TableSupport.buildPageRequest();
-//        Integer pageNum = pageDomain.getPageNum();
-//        Integer pageSize = pageDomain.getPageSize();
-//        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
-//        {
-//            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
-//            Boolean reasonable = pageDomain.getReasonable();
-//            PageHelper.startPage(pageNum, pageSize, orderBy).setReasonable(reasonable);
-//        }
-    }
+  /**
+   * 列表查询实现
+   *
+   * @param queryBean
+   * @return
+   */
+  protected List<?> doQueryList(Q queryBean) throws Exception {
+    StringBuilder stringBuilder = new StringBuilder("QUERY-LIST ");
+    stringBuilder.append(JSONUtil.toJsonStr(queryBean));
+    throw new Exception(SYS_INVALID_REQUEST_PATH + stringBuilder.toString());
+  }
 
-    /**
-     * 设置请求排序数据
-     */
-    protected void startOrderBy()
-    {
-//        PageDomain pageDomain = TableSupport.buildPageRequest();
-//        if (StringUtils.isNotEmpty(pageDomain.getOrderBy()))
-//        {
-//            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
-//            PageHelper.orderBy(orderBy);
-//        }
-    }
+  /**
+   * 泛用复杂查询
+   *
+   * @param queryBean
+   * @return
+   */
+  @PostMapping("/page")
+  public R queryPageList(@RequestBody Q queryBean) throws Exception {
+    queryListValidate(queryBean);
+    PageInfo pageInfo = doQueryPageList(queryBean);
+    return R.ok().data(pageInfo);
+  }
 
-    /**
-     * 响应请求分页数据
-     */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected TableDataInfo getDataTable(List<?> list)
-    {
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(HttpStatus.SUCCESS);
-        rspData.setMsg("查询成功");
-        rspData.setRows(list);
-        rspData.setTotal(new PageInfo(list).getTotal());
-        return rspData;
-    }
+  /**
+   * 泛用复杂查询校验
+   *
+   * @param queryBean
+   * @return
+   */
+  protected void queryListValidate(Q queryBean) throws Exception {
+  }
 
-    /**
-     * 返回成功
-     */
-    public AjaxResult success()
-    {
-        return AjaxResult.success();
-    }
+  /**
+   * 复杂查询分页实现
+   *
+   * @param queryBean
+   * @return
+   */
+  protected PageInfo<?> doQueryPageList(Q queryBean) throws Exception {
+    StringBuilder stringBuilder = new StringBuilder("QUERY-PAGE-LIST ");
+    stringBuilder.append(JSONUtil.toJsonStr(queryBean));
+    throw new Exception(SYS_INVALID_REQUEST_PATH + stringBuilder.toString());
+  }
 
-    /**
-     * 返回失败消息
-     */
-    public AjaxResult error()
-    {
-        return AjaxResult.error();
-    }
+  /**
+   * 泛用明细查询
+   *
+   * @param id
+   * @return
+   */
+  @GetMapping("/{id}")
+  public R view(@PathVariable("id") String id) throws Exception {
+    Object data = doView(id);
+    return R.ok().data(data);
+  }
 
-    /**
-     * 返回成功消息
-     */
-    public AjaxResult success(String message)
-    {
-        return AjaxResult.success(message);
-    }
+  /**
+   * 明细查询实现
+   *
+   * @param pk
+   * @return
+   */
+  protected Object doView(String pk) throws Exception {
+    StringBuilder stringBuilder = new StringBuilder("VIEW ");
+    stringBuilder.append(pk);
+    throw new Exception(SYS_INVALID_REQUEST_PATH + stringBuilder.toString());
+  }
 
-    /**
-     * 返回失败消息
-     */
-    public AjaxResult error(String message)
-    {
-        return AjaxResult.error(message);
-    }
+  /**
+   * 泛用明细查询
+   *
+   * @param id
+   * @return
+   */
+  @PostMapping("/save")
+  public R view(@RequestBody F commandForm) throws Exception {
+    saveValidate(commandForm);
+    Object rtn = doSave(commandForm);
+    return R.ok().data(rtn);
+  }
 
-    /**
-     * 响应返回结果
-     *
-     * @param rows 影响行数
-     * @return 操作结果
-     */
-    protected AjaxResult toAjax(int rows)
-    {
-        return rows > 0 ? AjaxResult.success() : AjaxResult.error();
-    }
+  /**
+   * 泛用保存校验
+   *
+   * @param commandForm
+   * @return
+   */
+  protected void saveValidate(F commandForm) throws Exception {
+  }
 
-    /**
-     * 响应返回结果
-     *
-     * @param result 结果
-     * @return 操作结果
-     */
-    protected AjaxResult toAjax(boolean result)
-    {
-        return result ? success() : error();
-    }
+  /**
+   * 保存实现
+   *
+   * @param commandForm
+   */
+  protected Object doSave(F commandForm) throws Exception {
+    StringBuilder stringBuilder = new StringBuilder("SAVE ");
+    stringBuilder.append(JSONUtil.toJsonStr(commandForm));
+    throw new Exception(SYS_INVALID_REQUEST_PATH + stringBuilder.toString());
+  }
 
-    /**
-     * 页面跳转
-     */
-    public String redirect(String url)
-    {
-        return StringUtils.format("redirect:{}", url);
-    }
+  /**
+   * 泛用多件删除
+   *
+   * @param ids
+   * @return
+   */
+  @DeleteMapping("/{ids}")
+  public R delete(@PathVariable("ids") String ids) throws Exception {
+    List<String> idArray = Arrays.asList(ids.split(","));
+    deleteValidate(idArray);
+    boolean result = doDelete(idArray);
+    return R.ok();
+  }
 
-//    /**
-//     * 获取用户缓存信息
-//     */
-//    public LoginUser getLoginUser()
-//    {
-//        return SecurityUtils.getLoginUser();
-//    }
-//
-//    /**
-//     * 获取登录用户id
-//     */
-//    public Long getUserId()
-//    {
-//        return getLoginUser().getUserId();
-//    }
-//
-//    /**
-//     * 获取登录部门id
-//     */
-//    public Long getDeptId()
-//    {
-//        return getLoginUser().getDeptId();
-//    }
-//
-//    /**
-//     * 获取登录用户名
-//     */
-//    public String getUsername()
-//    {
-//        return getLoginUser().getUsername();
-//    }
+  /**
+   * 泛用修改校验
+   *
+   * @param ids
+   * @return
+   */
+  protected void deleteValidate(List<String> ids) throws Exception {
+  }
+
+  /**
+   * 删除实现
+   *
+   * @param ids
+   */
+  protected boolean doDelete(List<String> ids) throws Exception {
+    StringBuilder stringBuilder = new StringBuilder("DELETE ");
+    stringBuilder.append(ids.toString());
+    throw new Exception(SYS_INVALID_REQUEST_PATH+stringBuilder.toString());
+  }
 }

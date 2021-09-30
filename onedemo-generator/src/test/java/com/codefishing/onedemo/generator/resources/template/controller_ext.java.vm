@@ -1,0 +1,159 @@
+#set($moduleName = ${table.name.substring(0, 2).toLowerCase()})
+#set($camelServiceName = ${table.serviceName.substring(0, 1).toLowerCase().concat(${table.serviceName.substring(1)})})
+#set($camelName = ${camelServiceName.replace("Service","")})
+#set($basicName = ${table.serviceName.substring(2, ${table.serviceName.length()}).replace("Service","")})
+package ${package.Controller};
+
+import cn.hutool.json.JSONUtil;
+import static com.pactera.core.controller.BaseController.API_PATH;
+import static com.pactera.core.controller.BaseController.API_VERSION;
+import static ${package.Controller}.${table.controllerName}.CONTROLLER_NAME;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
+import com.pactera.core.bean.R;
+import com.pactera.core.controller.BaseController;
+import com.pactera.core.exception.BizException;
+import com.pactera.core.exception.BizResultCodeEnum;
+import com.pactera.core.utils.QueryUtils;
+import com.pactera.pms.controller.${moduleName}.form.${basicName}CommonBean;
+import com.pactera.pms.controller.${moduleName}.form.${basicName}QueryBean;
+import com.pactera.pms.converter.${moduleName}.${basicName}Converter;
+import com.pactera.pms.entity.${moduleName}.${table.entityName};
+import com.pactera.pms.repository.${moduleName}.${table.serviceName};
+import com.pactera.pms.vo.${moduleName}.${basicName}Vo;
+import io.swagger.annotations.Api;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Api(tags = "功能编号 - ${table.comment}")
+@Slf4j
+@RestController
+@RequestMapping(API_PATH + API_VERSION + CONTROLLER_NAME)
+public class ${table.controllerName} extends
+    BaseController<${basicName}QueryBean, ${basicName}CommonBean> {
+
+  public static final String CONTROLLER_NAME = "${camelName}";
+
+  @Autowired
+  ${table.serviceName} baseService;
+
+  @Override
+  protected String getControllerName() {
+    return CONTROLLER_NAME;
+  }
+
+  /**
+   * 新增
+   *
+   * @param commandForm
+   * @return
+   */
+  @Override
+  protected Object doCreate(${basicName}CommonBean commondForm) {
+    ${basicName}Vo data = commondForm.getData();
+    ${table.entityName} entity = ${basicName}Converter.INSTANCE
+        .toEntity(data);
+        baseService.save(entity);
+    return entity;
+  }
+
+  /**
+   * 新增校验
+   *
+   * @param commandForm
+   * @throws BizException
+   */
+  @Override
+  protected void createValidate(${basicName}CommonBean commondForm)
+      throws BizException {
+    //实现新增校验
+  }
+  
+  /**
+   * 分页查询
+   *
+   * @param queryBean
+   * @return
+   */
+  @Override
+  protected PageInfo<${basicName}Vo> doQueryList(
+      ${basicName}QueryBean queryBean) {
+    Page page = queryBean.makePaging();
+    QueryWrapper<${table.entityName}> queryWrapper = QueryUtils
+        .makeQueryWrapper(queryBean, ${table.entityName}.class);
+    PageInfo<${basicName}Vo> info = page
+        .doSelectPageInfo(() -> baseService.list(queryWrapper));
+    return info;
+  }
+
+  /**
+   * 查看详情
+   *
+   * @param pk
+   * @return
+   */
+  @Override
+  protected Object doView(String pk) {
+    return baseService.getById(pk);
+  }
+
+  /**
+   * 修改
+   *
+   * @param commondForm
+   */
+  @Override
+  protected void doModify(${basicName}CommonBean commondForm) {
+    ${basicName}Vo data = commondForm.getData();
+    ${table.entityName} entity = ${basicName}Converter.INSTANCE
+        .toEntity(data);
+    boolean updateResult = baseService.updateById(entity);
+    // 乐观锁校验
+    if (!updateResult) {
+      throw new BizException(BizResultCodeEnum.SYS_ERR_OPTIMISTIC_LOCK,
+        String.valueOf(commondForm.getSysVersion()),
+        JSONUtil.toJsonStr(entity));
+    }
+  }
+
+
+  /**
+   * 修改校验
+   *
+   * @param commondForm
+   * @return
+   * @throws Exception
+   */
+  @Override
+  protected R modifyValidate(${basicName}CommonBean commondForm) throws Exception {
+    return R.ok();
+  }
+
+  /**
+   * 删除
+   *
+   * @param ids
+   * @return
+   */
+  @Override
+  protected boolean doDelete(List<String> ids) {
+    return baseService.removeByIds(ids);
+  }
+
+  /**
+   * 删除校验
+   *
+   * @param ids
+   * @throws Exception
+   */
+  @Override
+  protected void deleteValidate(List<String> ids) throws Exception {
+    //实现删除校验
+  }
+  
+}

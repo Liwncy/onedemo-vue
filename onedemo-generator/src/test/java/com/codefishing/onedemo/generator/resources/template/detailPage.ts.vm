@@ -1,0 +1,73 @@
+#set($moduleName = ${table.name.substring(0, 2).toLowerCase()})
+#set($camelServiceName = ${table.serviceName.substring(0, 1).toLowerCase().concat(${table.serviceName.substring(1)})})
+#set($camelName = ${camelServiceName.replace("Service","")})
+#set($basicName = ${table.serviceName.replace("Service","")})
+import { LayoutBaseSchema } from '../layout-base-schema';
+import { map } from 'rxjs/operators';
+import { _HttpClient } from '@delon/theme';
+// ${table.comment} 新建、修改
+export class 待修改 extends LayoutBaseSchema {
+  // 是否需要HTTPService
+  initParams: any = {
+    needData: true,
+  };
+  initLayout(needData: any): void {
+    this.layoutData = {
+      title: '${table.comment}',
+      type: 'form',
+      url: 'servicePath/api/v1/${basicName}/',
+      pageNo: '待修改',
+      blackList: [
+        {
+          path: 'collapse1',
+          property: [],
+        },
+      ],
+      layout: {
+        form: {
+          ui: {
+            spanLabel: 8,
+            spanControl: 16,
+            grid: {
+              span: 24,
+            },
+          },
+          properties: {
+            collapse1: {
+              type: 'object',
+              title: '${table.comment}',
+              required: [],
+              ui: {
+                widget: 'collapse',
+              },
+              properties: {
+                #foreach($field in ${table.fields})
+                	#if("${field.propertyName}"!="id")
+		                ${field.propertyName}: {
+		                  type: 'string',
+		                  title: '${field.comment}',
+		                  ui: {
+		                    grid: { span: 6 },
+		                  },
+		                },
+		            #end
+                #end
+              },
+            },
+          },
+        },
+        action: [
+          {
+            title: '保存',
+            controlNo: '待修改',
+            actionType: 'save',
+            event: {
+              api: 'servicePath/api/v1/${basicName}',
+              method: 'PUT',
+            },
+          },
+        ],
+      },
+    };
+  }
+}

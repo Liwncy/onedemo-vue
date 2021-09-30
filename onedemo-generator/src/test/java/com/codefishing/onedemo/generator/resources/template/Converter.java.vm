@@ -1,0 +1,36 @@
+#set($moduleName = ${table.name.substring(0, 2).toLowerCase()})
+#set($camelServiceName = ${table.serviceName.substring(0, 1).toLowerCase().concat(${table.serviceName.substring(1)})})
+#set($camelName = ${camelServiceName.replace("Service","")})
+#set($basicName = ${table.serviceName.substring(2, ${table.serviceName.length()}).replace("Service","")})
+package com.pactera.pms.converter.im;
+
+
+import com.github.pagehelper.PageInfo;
+import com.pactera.pms.entity.${moduleName}.${table.entityName};
+import com.pactera.pms.vo.${moduleName}.${basicName}Vo;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+import java.util.List;
+
+/**
+ * <p>
+ * $!{table.comment} Converter
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Mapper
+public interface ${basicName}Converter {
+
+  ${basicName}Converter INSTANCE = Mappers.getMapper(${basicName}Converter.class);
+
+  ${table.entityName} toEntity(${basicName}Vo vo);
+
+  List<${table.entityName}> toEntityList(List<${basicName}Vo> list);
+
+  ${basicName}Vo toVo(${table.entityName} entity);
+
+  PageInfo<${basicName}Vo> toVoPage(PageInfo<${table.entityName}> pageInfo);
+}

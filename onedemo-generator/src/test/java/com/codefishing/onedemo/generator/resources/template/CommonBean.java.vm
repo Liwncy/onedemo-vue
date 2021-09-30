@@ -1,0 +1,26 @@
+#set($moduleName = ${table.name.substring(0, 2).toLowerCase()})
+#set($camelServiceName = ${table.serviceName.substring(0, 1).toLowerCase().concat(${table.serviceName.substring(1)})})
+#set($camelName = ${camelServiceName.replace("Service","")})
+#set($basicName = ${table.serviceName.substring(2, ${table.serviceName.length()}).replace("Service","")})
+package com.pactera.pms.controller.${moduleName}.form;
+
+
+import com.pactera.core.controller.form.BaseCommonBean;
+import com.pactera.pms.entity.${moduleName}.${table.entityName};
+import com.pactera.pms.vo.${moduleName}.${basicName}Vo;
+import java.util.List;
+import lombok.Data;
+
+/**
+ * <p>
+ * $!{table.comment} CommonBean
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Data
+public class ${basicName}CommonBean extends BaseCommonBean {
+  private ${basicName}Vo data;
+  private List<${table.entityName}> entityList;
+}

@@ -37,6 +37,12 @@
             <version>${onedemo.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.codefishing</groupId>
+            <artifactId>onedemo-entity</artifactId>
+            <version>${onedemo.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>

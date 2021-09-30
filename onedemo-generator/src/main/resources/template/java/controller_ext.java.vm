@@ -1,0 +1,22 @@
+#set($moduleName = ${table.name.split("_")[0].toLowerCase()})
+#set($upModuleName = $moduleName.substring(0,1).toUpperCase()+$moduleName.substring(1))
+#set($camelServiceName = ${table.serviceName.substring(0, 1).toLowerCase().concat(${table.serviceName.substring(1)})})
+#set($camelName = ${camelServiceName.replace("Service","")})
+#set($basicName = ${table.serviceName.substring($moduleName.length(), ${table.serviceName.length()}).replace("Service","")})
+package ${package.Controller};
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * $!{tableInfo.comment}($!{tableInfo.name})表控制层
+ *
+ * @author $!author
+ * @since $!time.currTime()
+ */
+@RestController
+@RequestMapping("/${upModuleName}/${basicName}")
+public class ${table.controllerName} {
+
+
+}

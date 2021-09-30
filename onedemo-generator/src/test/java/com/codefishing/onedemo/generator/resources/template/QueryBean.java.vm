@@ -1,0 +1,23 @@
+#set($moduleName = ${table.name.substring(0, 2).toLowerCase()})
+#set($camelServiceName = ${table.serviceName.substring(0, 1).toLowerCase().concat(${table.serviceName.substring(1)})})
+#set($camelName = ${camelServiceName.replace("Service","")})
+#set($basicName = ${table.serviceName.substring(2, ${table.serviceName.length()}).replace("Service","")})
+package com.pactera.pms.controller.${moduleName}.form;
+
+
+import com.pactera.core.controller.form.BaseQueryBean;
+import com.pactera.core.controller.form.ExportExcelBean;
+import lombok.Data;
+
+/**
+ * <p>
+ * $!{table.comment} QueryBean
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Data
+public class ${basicName}QueryBean extends  BaseQueryBean<ExportExcelBean> {
+
+}

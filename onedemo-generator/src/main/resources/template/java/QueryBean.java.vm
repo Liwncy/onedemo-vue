@@ -1,0 +1,21 @@
+#set($moduleName = ${table.name.split("_")[0].toLowerCase()})
+#set($upModuleName = $moduleName.substring(0,1).toUpperCase()+$moduleName.substring(1))
+#set($basicName = ${table.serviceName.replace($upModuleName,"").replace("Service","")})
+package com.codefishing.onedemo.controller.${moduleName}.form;
+
+
+import com.codefishing.onedemo.framework.controller.form.BaseQueryBean;
+import lombok.Data;
+
+/**
+ * <p>
+ * $!{table.comment} QueryBean
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Data
+public class ${basicName}QueryBean extends  BaseQueryBean {
+
+}

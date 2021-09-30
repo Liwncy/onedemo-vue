@@ -1,0 +1,25 @@
+#set($moduleName = ${table.name.split("_")[0].toLowerCase()})
+#set($upModuleName = $moduleName.substring(0,1).toUpperCase()+$moduleName.substring(1))
+#set($basicName = ${table.serviceName.replace($upModuleName,"").replace("Service","")})
+package com.codefishing.onedemo.controller.${moduleName}.form;
+
+
+import com.codefishing.onedemo.framework.controller.form.BaseCommonBean;
+import com.codefishing.onedemo.entity.${moduleName}.${table.entityName};
+import com.codefishing.onedemo.vo.${moduleName}.${basicName}Vo;
+import java.util.List;
+import lombok.Data;
+
+/**
+ * <p>
+ * $!{table.comment} CommonBean
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Data
+public class ${basicName}CommonBean extends BaseCommonBean {
+  private ${basicName}Vo data;
+  private List<${table.entityName}> entityList;
+}
